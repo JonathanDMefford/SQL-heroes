@@ -1,15 +1,21 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$dbname = "sql-heroes";
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+require "connection.php";
+require "header.php";
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$sql = "SELECT * FROM heroes";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $output = "";
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $output .= "<div>id: " . $row["name"]. " - Name: " . $row["about_me"]. " " . $row["biography"]. "</div><br>";
+    }
+    echo $output;
+} else {
+    echo "0 results";
 }
-echo "Connected successfully";
+$conn->close();
+
 ?>
