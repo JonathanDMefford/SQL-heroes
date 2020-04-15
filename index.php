@@ -1,21 +1,37 @@
 <?php
-
 require "connection.php";
 require "header.php";
-
-$sql = "SELECT * FROM heroes";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $output = "";
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        $output .= "<div>id: " . $row["name"]. " - Name: " . $row["about_me"]. " " . $row["biography"]. "</div><br>";
-    }
-    echo $output;
-} else {
-    echo "0 results";
-}
-$conn->close();
-
 ?>
+
+<div class="container mx-auto">
+    <h1 class="my-5 text-center">Hero-Book</h1>
+    <div class="row">
+        <?php
+        $sql = "SELECT * FROM heroes";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $output = "";
+            while ($row = $result->fetch_assoc()) {
+                $hero = "hero.php?id=" . $row["id"];
+                $output .=
+                    '<div class="col-4 px-3">
+            <div class="card bg-dark text-white mb-5 mx-3 px-3" style="width: 20rem; min-height: 25vh;">
+                <img src="..." class="card-img-top" alt="..." />
+                <div class="card-body text-center">
+                    <h5 class="card-title border-bottom text-center">' . $row["name"] . '</h5>
+                    <p class="card-text">' . $row["about_me"] . '</p>
+                    <a href=' . $hero . ' class="btn btn-primary">View Profile</a>
+                </div>
+            </div>
+            </div>';
+            }
+            echo $output;
+        } else {
+            echo "0 results";
+        }
+        ?>
+    </div>
+</div>
+</body>
+
+</html>
