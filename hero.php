@@ -1,16 +1,16 @@
 <?php
 require "connection.php";
 require "header.php";
-$id = $_GET["id"];
+$heroId = $_GET["id"];
 ?>
 
 
 <div class="container">
     <a class="btn btn-primary btn-lg" href="index.php" type="submit">Go Back</a>
-    <div class="row my-5 justify-content-center">
+    <div class="row mt-5 mb-2 justify-content-center">
         <div class="col-6">
             <?php
-            $sql = "SELECT * FROM heroes WHERE id = " . $id;
+            $sql = "SELECT * FROM heroes WHERE id = " . $heroId;
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $output = "";
@@ -26,41 +26,63 @@ $id = $_GET["id"];
         </div>
     </div>
 
+    <div class="row mb-5 justify-content-center">
+        <div class="col-3">
+            <h4 class="mb-2 text-center border-bottom">Abilities</h4>
+            <?php
+            $sql = "SELECT * FROM ability_hero
+            INNER JOIN abilities on abilities.id = ability_hero.ability_id
+            INNER JOIN heroes on heroes.id = ability_hero.hero_id
+            WHERE ability_hero.hero_id = $heroId";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                $output = "";
+                while ($row = $result->fetch_assoc()) {
+                    $output .= '<li>' . $row["ability"] . '</li>';
+                }
+                echo $output;
+            } else {
+                echo 'No Abilities';
+            }
+            ?>
+        </div>
+    </div>
+
     <div class="row mb-5 justify-content-between">
-        <div class="col-4">
+        <div class="col-4 text-center">
             <h2 class="mb-4 text-center border-bottom border-dark">FRIENDS</h2>
             <?php
             $sql = "SELECT * FROM relationships
                         INNER JOIN heroes on relationships.hero2_id=heroes.id
-                        WHERE hero1_id = " . $id . " AND type_id = 1";
+                        WHERE hero1_id = " . $heroId . " AND type_id = 1";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $output = "";
                 while ($row = $result->fetch_assoc()) {
-                    $output .= '<p>' . $row["name"] . '</p>';
+                    $output .= '<p>' . $row["name"] . '<a class="btn btn-danger float-right" href="/removeentity.php?method=removeFriend&heroID=' . $heroId . '&id=' . $row["relationship_id"] . '" type="submit">Remove Friend</a></p>';
                 }
                 echo $output;
             } else {
-                echo "No Friends Currently";
+                echo 'No Friends Currently <br><br> <a class="btn btn-success" href="/addentity.php?method=addFriend" type="submit">Add Friend</a>';
             }
             ?>
         </div>
 
-        <div class="col-4">
+        <div class="col-4 text-center">
             <h2 class="mb-4 text-center border-bottom border-dark">ENEMIES</h2>
             <?php
             $sql = "SELECT * FROM relationships
                         INNER JOIN heroes on relationships.hero2_id=heroes.id
-                        WHERE hero1_id = " . $id . " AND type_id = 2";
+                        WHERE hero1_id = " . $heroId . " AND type_id = 2";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $output = "";
                 while ($row = $result->fetch_assoc()) {
-                    $output .= '<p>' . $row["name"] . '</p>';
+                    $output .= '<p>' . $row["name"] . '<a class="btn btn-danger float-right" href="/removeentity.php?method=removeEnemy&id=' . $row["relationship_id"] . '" type="submit">Remove Enemy</a></p>';
                 }
                 echo $output;
             } else {
-                echo "No Enemies Currently";
+                echo 'No Enemies Currently <br><br> <a class="btn btn-success" href="/addentity.php?method=addEnemy" type="submit">Add Enemy</a>';
             }
             ?>
         </div>
@@ -70,4 +92,3 @@ $id = $_GET["id"];
 </body>
 
 </html>
-
