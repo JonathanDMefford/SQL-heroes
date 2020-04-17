@@ -32,6 +32,36 @@ require "header.php";
         }
         ?>
     </div>
+
+    <h1 class="text-center">Add Your Profile</h1>
+    <div class="row justify-content-center my-5">
+        <form action="addProfile.php" method="post">
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Name</label>
+                <input type="text" class="form-control" name="hero" id="hero" placeholder="Enter Name">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect2">Select Ability</label>
+                <select multiple class="form-control" name="ability[]" id="ability">
+                    <?php
+                    $sql = "SELECT * FROM abilities";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<option value="' . $row["id"] . '">' . $row["ability"] . '</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Add Bio</label>
+                <textarea class="form-control" name="bio" id="bio" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Profile</button>
+        </form>
+    </div>
+
 </div>
 </body>
 

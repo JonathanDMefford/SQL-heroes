@@ -3,34 +3,43 @@
 require "connection.php";
 require "header.php";
 $method = $_GET["method"];
-$id = $_GET["relationship_id"];
-$heroId = $_GET["hero"];
+$id = $_GET["id"];
+$heroId = $_GET["heroId"];
 
 if ($method == "removeFriend") {
-    removeRelationship($id);
+	removeRelationship($id);
 }
 
 if ($method == "removeEnemy") {
 	removeRelationship($id);
 }
 
-function removeRelationship($id) {
-	$sql = "DELETE FROM relationships WHERE id = $id";
+if ($method == "makeEnemy") {
+	makeEnemy($id);
+}
+
+if ($method == "makeFriend") {
+	makeFriend($id);
+}
+
+function makeFriend($id) {
+	$sql = "UPDATE relationships SET type_id = 1 WHERE relationship_id = $id";
 	$result = $GLOBALS["conn"]->query($sql);
 	echo $result;
 }
 
-// function removeEnemy($id) {
+function makeEnemy($id) {
+	$sql = "UPDATE relationships SET type_id = 2 WHERE relationship_id = $id";
+	$result = $GLOBALS["conn"]->query($sql);
+	echo $result;
+}
 
-// }
-
+function removeRelationship($id) {
+	$sql = "DELETE FROM relationships WHERE relationship_id = $id";
+	$result = $GLOBALS["conn"]->query($sql);
+	echo $result;
+}
 
 header("Location: /hero.php?id=" . $heroId);
 
 ?>
-
-
-<!-- SELECT * FROM ability_hero
-	INNER JOIN abilities on abilities.id=ability_hero.ability_id
-	INNER JOIN heroes on heroes.id=ability_hero.hero_id
-	WHERE ability_hero.hero_id= $id -->

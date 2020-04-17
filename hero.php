@@ -59,7 +59,8 @@ $heroId = $_GET["id"];
             if ($result->num_rows > 0) {
                 $output = "";
                 while ($row = $result->fetch_assoc()) {
-                    $output .= '<p>' . $row["name"] . '<a class="btn btn-danger float-right" href="/removeentity.php?method=removeFriend&heroID=' . $heroId . '&id=' . $row["relationship_id"] . '" type="submit">Remove Friend</a></p>';
+                    $output .= '<p>' . '<a class="btn btn-danger float-left" href="/removeentity.php?method=removeFriend&heroId=' . $heroId . '&id=' . $row["relationship_id"] . '" type="submit">X</a></p>'. $row["name"] . 
+                    '<a class="btn btn-warning float-right" href="/removeentity.php?method=makeEnemy&heroId=' . $heroId . '&id=' . $row["relationship_id"] . '" type="submit">Make Enemy</a></p>';
                 }
                 echo $output;
             } else {
@@ -78,7 +79,8 @@ $heroId = $_GET["id"];
             if ($result->num_rows > 0) {
                 $output = "";
                 while ($row = $result->fetch_assoc()) {
-                    $output .= '<p>' . $row["name"] . '<a class="btn btn-danger float-right" href="/removeentity.php?method=removeEnemy&id=' . $row["relationship_id"] . '" type="submit">Remove Enemy</a></p>';
+                    $output .= '<p>' . '<a class="btn btn-danger float-left" href="/removeentity.php?method=removeEnemy&heroId=' . $heroId . '&id=' . $row["relationship_id"] . '" type="submit">X</a></p>'. $row["name"] . 
+                    '<a class="btn btn-warning float-right" href="/removeentity.php?method=makeFriend&heroId=' . $heroId . '&id=' . $row["relationship_id"] . '" type="submit">Make Friend</a></p>';
                 }
                 echo $output;
             } else {
